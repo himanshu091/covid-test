@@ -1,11 +1,13 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import BottomTab from '../components/BottomTab'
 
 const Home = () => {
     return (
-        <View>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#fafafa'}}>
             <Text>Home Page</Text>
-        </View>
+            <BottomTab/>
+        </SafeAreaView>
     )
 }
 
