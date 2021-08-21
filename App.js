@@ -53,6 +53,18 @@ const Section = ({children, title}): Node => {
   );
 };
 
+import { Provider } from 'react-redux';
+import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore, persistReducer } from 'redux-persist'
+import thunk from 'redux-thunk';
+
+
+import authReducer from './store/reducers/authReducer'
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Routing from './Routing';
+
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -64,34 +76,28 @@ const App: () => Node = () => {
     SplashScreen.hide();
   }, [])
 
+    // Redux configuration starts
+    const rootReducer = combineReducers({
+      auth: authReducer,
+    })
+    
+    const persistConfig = {
+      key: 'travel_clini_v1',
+      storage:AsyncStorage,
+    }
+    const persistedReducer = persistReducer(persistConfig, rootReducer)
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+    const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(thunk)))
+    let persistor = persistStore(store)
+    console.log("persistor", store.getState())
+    // Redux configuration ends
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Provider store={store}>
+      <PersistGate loading={true} persistor={persistor}>
+          <Routing />
+      </PersistGate>
+    </Provider>
   );
 };
 
