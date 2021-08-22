@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import Reports from './screens/Reports';
 
 
 
@@ -28,6 +29,7 @@ function Routing() {
         <NavigationContainer>
             <Stack.Navigator headerMode="none" screenOptions={{animationEnabled: false}}>
                 <Stack.Screen name="Home" component={Home}/>
+                <Stack.Screen name="Reports" component={Reports}/>
                 
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />
