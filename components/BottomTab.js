@@ -5,22 +5,22 @@ import bell from '../assets/bell.png'
 import calander from '../assets/calander.png'
 import settings from '../assets/settings.png'
 import home from '../assets/home.png'
-const BottomTab = () => {
+const BottomTab = ({navigation}) => {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.eachItem}>
+            <TouchableOpacity style={styles.eachItem} onPress={()=>{}}>
                 <Image source={search} style={styles.icon}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.eachItem}>
+            <TouchableOpacity style={styles.eachItem} onPress={()=>navigation.navigate('Reports')}>
                 <Image source={calander} style={styles.icon}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.specialItem}>
+            <TouchableOpacity style={styles.specialItem}  onPress={()=>navigation.navigate('Home')}>
                 <Image source={home} style={styles.icon}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.eachItem}>
+            <TouchableOpacity style={styles.eachItem} onPress={()=>navigation.navigate('Reports')}>
                 <Image source={bell} style={styles.icon}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.eachItem}>
+            <TouchableOpacity style={styles.eachItem} onPress={()=>{}}>
                 <Image source={settings} style={styles.icon}/>
             </TouchableOpacity>
         </View>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import BottomTab from '../components/BottomTab'
-import UserAccordian from '../components/UserAccordian'
+import ReportAccordian from '../components/ReportAccordian'
 import search_icon_blue from '../assets/search_icon_blue.png'
-const Home = ({navigation}) => {
+const Reports = ({navigation}) => {
     const [query, setQuery] = useState("")
     const handleSubmit = () => {
 
@@ -13,12 +13,9 @@ const Home = ({navigation}) => {
             <View style={{ paddingHorizontal: 10 }}>
                 <View style={styles.header}>
                     <View style={styles.headerPart1}>
-                        <Text style={styles.headerTxt1}>Users</Text>
+                        <Text style={styles.headerTxt1}>Reports</Text>
                         <Text style={styles.headerTxt2}>(Total 50+)</Text>
                     </View>
-                    <TouchableOpacity style={styles.headerBtn}>
-                        <Text style={styles.btnTxt}>+ ADD NEW USER</Text>
-                    </TouchableOpacity>
                 </View>
                 <View style={styles.searchBar}>
                     <TextInput
@@ -42,7 +39,7 @@ const Home = ({navigation}) => {
                         <Text style={styles.th}>Name</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <Text style={styles.th}>Actions</Text>
+                        <Text style={styles.th}>Results</Text>
                     </TouchableOpacity>
                     <View>
                         <Text style={styles.th}></Text>
@@ -53,29 +50,29 @@ const Home = ({navigation}) => {
             <ScrollView style={{ paddingHorizontal: 10 }}>
 
 
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
-                <UserAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
+                <ReportAccordian />
             </ScrollView>
             <BottomTab navigation={navigation}/>
         </SafeAreaView>
     )
 }
 
-export default Home
+export default Reports
 
 const styles = StyleSheet.create({
     header: {
