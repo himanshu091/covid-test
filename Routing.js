@@ -28,10 +28,11 @@ function Routing() {
     return (
         <NavigationContainer>
             <Stack.Navigator headerMode="none" screenOptions={{animationEnabled: false}}>
+            <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Home" component={Home}/>
                 <Stack.Screen name="Reports" component={Reports}/>
                 
-                <Stack.Screen name="Login" component={Login} />
+               
                 <Stack.Screen name="Register" component={Register} />
 
             </Stack.Navigator>
