@@ -8,6 +8,7 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import Reports from './screens/Reports';
+import QRTest from './screens/QRTest';
 
 
 
@@ -30,6 +31,7 @@ function Routing() {
             <Stack.Navigator headerMode="none" screenOptions={{animationEnabled: false}}>
                 <Stack.Screen name="Home" component={Home}/>
                 <Stack.Screen name="Reports" component={Reports}/>
+                <Stack.Screen name="QRTest" component={QRTest}/>
                 
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />

@@ -20,7 +20,7 @@ const BottomTab = ({navigation}) => {
             <TouchableOpacity style={styles.eachItem} onPress={()=>navigation.navigate('Reports')}>
                 <Image source={bell} style={styles.icon}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.eachItem} onPress={()=>{}}>
+            <TouchableOpacity style={styles.eachItem} onPress={()=>{navigation.navigate('QRTest')}}>
                 <Image source={settings} style={styles.icon}/>
             </TouchableOpacity>
         </View>

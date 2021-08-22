@@ -14,6 +14,8 @@ target 'splashexample' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'splashexampleTests' do
     inherit! :complete
     # Pods for testing
