@@ -9,6 +9,7 @@ import Login from './screens/Login';
 import Register from './screens/Register';
 import Reports from './screens/Reports';
 import QRTest from './screens/QRTest';
+import { connect } from 'react-redux';
 
 
 
@@ -23,23 +24,29 @@ import QRTest from './screens/QRTest';
 //       </Tab.Navigator>
 //     );
 //   }
-  
+
 const Stack = createStackNavigator();
-function Routing() {
+function Routing({token}) {
     return (
         <NavigationContainer>
-            <Stack.Navigator headerMode="none" screenOptions={{animationEnabled: false}}>
-            <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Home" component={Home}/>
-                <Stack.Screen name="Reports" component={Reports}/>
-                <Stack.Screen name="QRTest" component={QRTest}/>
+            {!token && <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: false }}>
+                <Stack.Screen name="Login" component={Login} />
+            </Stack.Navigator>}
+            {token && <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: false }}>
                 
-               
+                <Stack.Screen name="Reports" component={Reports} />
+                <Stack.Screen name="QRTest" component={QRTest} />
+
+                <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Register" component={Register} />
 
-            </Stack.Navigator>
+            </Stack.Navigator>}
         </NavigationContainer>
     );
 }
-
-export default Routing;
+const mapStateToProps = state => {
+    return {
+        token: state.auth.token
+    }
+}
+export default connect(mapStateToProps)(Routing);

@@ -5,18 +5,25 @@ import downCheveron from '../assets/chdown.png'
 import delete_icon from '../assets/delete.png'
 import eye_icon from '../assets/eye.png'
 import edit_icon from '../assets/edit.png'
-const ReportAccordian = () => {
-    const [open, setOpen] = useState(false)
+const ReportAccordian = ({data}) => {
+    const [open, setOpen] = useState(false);
+    function truncate(str){
+        let n = 11;
+        return (str.length > n) ? str.substr(0, n-1) + '...' : str;
+    };
     return (
         <View style={styles.mainContainer}>
             <View style={styles.mainHeader}>
-                <Text style={styles.normalTxt}>TEST0001</Text>
-                <Text style={styles.normalTxt}>Debra Carpenter</Text>
-                {true?<TouchableOpacity style={styles.dflex}>
+                <Text style={styles.normalTxt}>{data._id.substring(data._id.length - 7)}</Text>
+                <Text style={styles.normalTxt}>{truncate(data?.user?.firstName + ' ' + data?.user?.lastName)}</Text>
+                {data?.results === 'negative' && <TouchableOpacity style={styles.dflex}>
                     <Text style={styles.green_txt}>Negative</Text>
-                </TouchableOpacity>:
-                <TouchableOpacity style={styles.dflex}>
+                </TouchableOpacity>}
+                {data?.results === 'positive' && <TouchableOpacity style={styles.dflex}>
                     <Text style={styles.red_txt}>Positive</Text>
+                </TouchableOpacity>}
+                {data?.results === 'pending' && <TouchableOpacity style={styles.dflex}>
+                    <Text>Pending</Text>
                 </TouchableOpacity>}
                 <TouchableOpacity style={!open?styles.openIcon:styles.closeIcon} onPress={()=>{setOpen(!open)}}>
                     <Image source={!open?downCheveron:upcheveron}  style={{height:15, width:15}}/>
@@ -25,15 +32,19 @@ const ReportAccordian = () => {
             {open && <View style={styles.insideData}>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>ID             :    </Text>
-                    <Text style={styles.value}>TEST0001</Text>
+                    <Text style={styles.value}>{data._id}</Text>
                 </View>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>Package  :    </Text>
-                    <Text style={styles.value}>weandd@gmail.com</Text>
+                    <Text style={styles.value}>{data?.packageid?.packageName}</Text>
                 </View>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>Price        :    </Text>
-                    <Text style={styles.value}>From $70</Text>
+                    <Text style={styles.value}>$ {data?.packageid?.price1}</Text>
+                </View>
+                <View style={styles.dflex}>
+                    <Text style={styles.key}>Barcode  :    </Text>
+                    <Text style={styles.value}>{data?.barcode}</Text>
                 </View>
                 <TouchableOpacity style={styles.editBtn}>
                     <Image source={edit_icon} style={{height:15, width:15}}/>
@@ -68,7 +79,8 @@ const styles = StyleSheet.create({
     },
     normalTxt:{
         fontWeight: '700',
-        color: '#4f4f4f'
+        color: '#4f4f4f',
+        textTransform: 'capitalize'
     },
     openIcon:{
         backgroundColor: '#e3f0f6',

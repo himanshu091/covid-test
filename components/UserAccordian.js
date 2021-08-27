@@ -5,13 +5,19 @@ import downCheveron from '../assets/chdown.png'
 import delete_icon from '../assets/delete.png'
 import eye_icon from '../assets/eye.png'
 import edit_icon from '../assets/edit.png'
-const UserAccordian = () => {
+import scan_icon from '../assets/scan.png'
+import moment from 'moment'
+const UserAccordian = ({data, openQrScanner}) => {
     const [open, setOpen] = useState(false)
+    function truncate(str){
+        let n = 13;
+        return (str.length > n) ? str.substr(0, n-1) + '...' : str;
+    };
     return (
         <View style={styles.mainContainer}>
             <View style={styles.mainHeader}>
-                <Text style={styles.normalTxt}>APT0013</Text>
-                <Text style={styles.normalTxt}>Debra Carpenter</Text>
+                <Text style={styles.normalTxt}>{data._id.substring(data._id.length - 7)}</Text>
+                <Text style={styles.normalTxt}>{truncate(data?.user?.firstName + ' ' + data?.user?.lastName)}</Text>
                 <TouchableOpacity style={styles.dflex}>
                     <Image source={eye_icon} style={{height:15, width:15}}/>
                     <Text style={styles.green_txt}>View</Text>
@@ -27,33 +33,38 @@ const UserAccordian = () => {
             {open && <View style={styles.insideData}>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>ID        :    </Text>
-                    <Text style={styles.value}>APT0013</Text>
+                    <Text style={styles.value}>{data._id.substring(data._id.length - 7)}</Text>
                 </View>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>Email  :    </Text>
-                    <Text style={styles.value}>weandd@gmail.com</Text>
+                    <Text style={styles.value}>{data?.user?.email}</Text>
                 </View>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>Date    :    </Text>
-                    <Text style={styles.value}>22 Feb 2021</Text>
+                    <Text style={styles.value}>{moment(data?.bookedFor).format('DD MMM YYYY')}</Text>
                 </View>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>Time   :    </Text>
-                    <Text style={styles.value}>09:50 PM</Text>
+                    <Text style={styles.value}>{moment(data?.bookedFor).format('LT')}</Text>
                 </View>
                 <View style={styles.dflex}>
                     <Text style={styles.key}>Result :    </Text>
-                    <Text style={[styles.value, {color:'#6da06d'}]}>Negative</Text>
-                    <Text style={[styles.value, {color:'#de273a'}]}>Positive</Text>
+                    {data?.results === 'negative' && <Text style={[styles.value, {color:'#6da06d'}]}>Negative</Text>}
+                    {data?.results === 'positive' && <Text style={[styles.value, {color:'#de273a'}]}>Positive</Text>}
+                    {data?.results === 'pending' && <Text style={[styles.value]}>Pending</Text>}
                 </View>
                 <View style={[styles.dflex, styles.status]}>
                     <Text style={styles.key}>Status:</Text>
-                    <Text style={[styles.value, {color:'#6da06d'}]}>Approved</Text>
+                    {data?.approved && <Text style={[styles.value, {color:'#6da06d'}]}>Approved</Text>}
+                    {!data?.approved && <Text style={[styles.value, {color:'#6da06d'}]}>-</Text>}
                 </View>
                 <TouchableOpacity style={styles.editBtn}>
                     <Image source={edit_icon} style={{height:15, width:15}}/>
                     <Text style={styles.editTxt}>Edit</Text>
                 </TouchableOpacity>
+                {!data?.approved && <TouchableOpacity style={styles.scanBtn} onPress={openQrScanner}>
+                    <Image source={scan_icon} style={{height:35, width:35}}/>
+                </TouchableOpacity>}
             </View>}
         </View>
     )
@@ -83,7 +94,8 @@ const styles = StyleSheet.create({
     },
     normalTxt:{
         fontWeight: '700',
-        color: '#4f4f4f'
+        color: '#4f4f4f',
+        textTransform: 'capitalize'
     },
     openIcon:{
         backgroundColor: '#e3f0f6',
@@ -118,6 +130,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: 0
+    },
+    scanBtn:{
+        position: 'absolute',
+        top: 35,
+        right: 0,
+
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     editBtn:{
         position: 'absolute',

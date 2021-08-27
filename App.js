@@ -54,16 +54,11 @@ const Section = ({children, title}): Node => {
 };
 
 import { Provider } from 'react-redux';
-import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore, persistReducer } from 'redux-persist'
-import thunk from 'redux-thunk';
 
-
-import authReducer from './store/reducers/authReducer'
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Routing from './Routing';
+import store from './store/myStore';
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -77,17 +72,6 @@ const App: () => Node = () => {
   }, [])
 
     // Redux configuration starts
-    const rootReducer = combineReducers({
-      auth: authReducer,
-    })
-    
-    const persistConfig = {
-      key: 'travel_clini_v1',
-      storage:AsyncStorage,
-    }
-    const persistedReducer = persistReducer(persistConfig, rootReducer)
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-    const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(thunk)))
     let persistor = persistStore(store)
     console.log("persistor", store.getState())
     // Redux configuration ends

@@ -3,10 +3,21 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity
 import BottomTab from '../components/BottomTab'
 import ReportAccordian from '../components/ReportAccordian'
 import search_icon_blue from '../assets/search_icon_blue.png'
+import { getAllReports } from '../utils/api'
 const Reports = ({navigation}) => {
     const [query, setQuery] = useState("")
+    const [reports, setReports] = useState(null)
+
+    useEffect(() => {
+        fetchAllReports()
+    }, [])
     const handleSubmit = () => {
 
+    }
+    const fetchAllReports = async () => {
+        const res = await getAllReports();
+        console.log("Reports",JSON.stringify(res.reports))
+        setReports(res.reports)
     }
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fafafa', paddingBottom: 70 }}>
@@ -50,22 +61,10 @@ const Reports = ({navigation}) => {
             <ScrollView style={{ paddingHorizontal: 10 }}>
 
 
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
-                <ReportAccordian />
+                
+                {reports && reports.map(item => {
+                    return <ReportAccordian key={item._id} data={item}/>
+                })}
             </ScrollView>
             <BottomTab navigation={navigation}/>
         </SafeAreaView>

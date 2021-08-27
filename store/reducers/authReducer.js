@@ -1,19 +1,25 @@
 const initialState = {
-    email: "", 
-    name: "", 
+    email: null, 
     token: null, 
-    user_id: null, 
-    auth_process: false
+    auth_process: false,
+    token: null,
+    user_id:null,
+    fName: null,
+    lName: null,
+    phone: null,
+
 }
 export default (state = initialState, action) => {
     switch (action.type) {
         case 'SIGNIN':
             return {
                 ...state,
-                email:action.payload.email, 
-                name:action.payload.name, 
                 token: action.payload.token,
-                is_guest: false
+                user_id: action.payload._id,
+                fName: action.payload.firstName,
+                lName: action.payload.lastName,
+                phone: action.payload.phone,
+                email: action.payload.email
             }
         case 'SIGNUP':
             return {
