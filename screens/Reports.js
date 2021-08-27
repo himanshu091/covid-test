@@ -4,10 +4,11 @@ import BottomTab from '../components/BottomTab'
 import ReportAccordian from '../components/ReportAccordian'
 import search_icon_blue from '../assets/search_icon_blue.png'
 import { getAllReports } from '../utils/api'
+import { FlatList } from 'react-native'
 const Reports = ({navigation}) => {
     const [query, setQuery] = useState("")
     const [reports, setReports] = useState(null)
-
+    const [loading, setloading] = useState(false)
     useEffect(() => {
         fetchAllReports()
     }, [])
@@ -16,16 +17,16 @@ const Reports = ({navigation}) => {
     }
     const fetchAllReports = async () => {
         const res = await getAllReports();
-        console.log("Reports",JSON.stringify(res.reports))
+        // console.log("Reports",JSON.stringify(res.reports))
         setReports(res.reports)
     }
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fafafa', paddingBottom: 70 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fafafa'}}>
             <View style={{ paddingHorizontal: 10 }}>
                 <View style={styles.header}>
                     <View style={styles.headerPart1}>
                         <Text style={styles.headerTxt1}>Reports</Text>
-                        <Text style={styles.headerTxt2}>(Total 50+)</Text>
+                        <Text style={styles.headerTxt2}>(Total {reports?.length}+)</Text>
                     </View>
                 </View>
                 <View style={styles.searchBar}>
@@ -58,15 +59,22 @@ const Reports = ({navigation}) => {
                 </View>
             </View>
             
-            <ScrollView style={{ paddingHorizontal: 10 }}>
+            <SafeAreaView style={{ paddingHorizontal: 10 }}>
 
-
-                
-                {reports && reports.map(item => {
-                    return <ReportAccordian key={item._id} data={item}/>
-                })}
-            </ScrollView>
-            <BottomTab navigation={navigation}/>
+                {reports && <FlatList
+                    style={{marginBottom: 260}}
+                    data={reports}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => {
+                        if(item.barcode.toLowerCase().includes(query)){
+                            return <ReportAccordian key={item._id} data={item} updatePage={fetchAllReports}/>
+                        }
+                    }}
+                    onRefresh={fetchAllReports}
+                    refreshing={loading}
+                />}
+            </SafeAreaView>
+            <BottomTab navigation={navigation} current={2}/>
         </SafeAreaView>
     )
 }

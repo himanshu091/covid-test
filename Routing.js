@@ -10,6 +10,7 @@ import Register from './screens/Register';
 import Reports from './screens/Reports';
 import QRTest from './screens/QRTest';
 import { connect } from 'react-redux';
+import Settings from './screens/Settings';
 
 
 
@@ -33,12 +34,11 @@ function Routing({token}) {
                 <Stack.Screen name="Login" component={Login} />
             </Stack.Navigator>}
             {token && <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: false }}>
-                
+                <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Reports" component={Reports} />
                 <Stack.Screen name="QRTest" component={QRTest} />
-
-                <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="Settings" component={Settings} />
 
             </Stack.Navigator>}
         </NavigationContainer>

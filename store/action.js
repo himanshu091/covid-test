@@ -32,3 +32,9 @@ export const loginAction = (data) => async (dispatch, getState) => {
         console.log(err)
     }
 };
+export const LOGOUT= 'LOGOUT';
+export const logoutAction = () => async (dispatch, getState) => {
+    dispatch({
+        type: LOGOUT
+    })
+};

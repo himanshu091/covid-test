@@ -21,27 +21,16 @@ export default (state = initialState, action) => {
                 phone: action.payload.phone,
                 email: action.payload.email
             }
-        case 'SIGNUP':
-            return {
-                ...state,
-                email:action.payload.email, 
-                user_id:action.payload.user_id,
-            }
         case 'LOGOUT':
             return{
-                email: "", 
-                name: "", 
+                email: null, 
                 token: null, 
-                user_id: "", 
-                image: "",
-                is_guest: true,
-                auth_process: false
-            }
-        case 'BEGIN_AUTH':
-            console.log("Begin Auth State =>", state)
-            return{
-                ...state,
-                auth_process: true
+                auth_process: false,
+                token: null,
+                user_id:null,
+                fName: null,
+                lName: null,
+                phone: null,
             }
         default:
             return state

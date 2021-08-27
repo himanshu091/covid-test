@@ -28,4 +28,8 @@ export const addBarToAppointment = async (id, data) => {
     const res = await instance.post(`/api/update/${id}`, data);
     return res.data
 }
+export const addResultToReport = async (id, data) => {
+    const res = await instance.post(`/api/declare/result/${id}`, data);
+    return res.data
+}
   

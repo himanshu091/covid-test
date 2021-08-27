@@ -7,13 +7,15 @@ import { addBarToAppointment, getAllAppointments } from '../utils/api'
 import CustomBottomSheet from '../components/CustomBottomSheet'
 import ScanBox from '../components/ScanBox'
 import { Alert } from 'react-native'
+import { FlatList } from 'react-native'
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
     const scanSheet = useRef()
     const [query, setQuery] = useState("")
     const [appointments, setAppointments] = useState(null)
 
     const [currentlyScanning, setCurrentlyScanning] = useState(null)
+    const [loading, setloading] = useState(false)
 
     useEffect(() => {
         fetchAllAppointments()
@@ -22,7 +24,9 @@ const Home = ({navigation}) => {
 
     }
     const fetchAllAppointments = async () => {
+        setloading(true)
         const res = await getAllAppointments();
+        setloading(false)
         // console.log("Appointments",res)
         setAppointments(res.appointments)
     }
@@ -36,31 +40,32 @@ const Home = ({navigation}) => {
             `Appointment ${currentlyScanning}`,
             `Scanned Code = ${scannedValue}`,
             [
-                { text: "Cancel", onPress: () => {} },
-                { text: "Submit", onPress: () => {updateAppointmentWithBarCode(scannedValue)} }
+                { text: "Cancel", onPress: () => { } },
+                { text: "Submit", onPress: () => { updateAppointmentWithBarCode(scannedValue) } }
             ],
         );
     }
     const updateAppointmentWithBarCode = async (barcodeValue) => {
-        if(!currentlyScanning){
+        if (!currentlyScanning) {
             Alert.alert(
                 `Something's Wrong`,
                 `Please Retry!`,
                 [
-                    { text: "Ok", onPress: () => {} },
+                    { text: "Ok", onPress: () => { } },
                 ],
             );
         }
-        const res = await addBarToAppointment(currentlyScanning, {barcode:barcodeValue});
-        console.log("Scan saved",res)
+        const res = await addBarToAppointment(currentlyScanning, { barcode: barcodeValue });
+        console.log("Scan saved", res)
+        fetchAllAppointments()
     }
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fafafa', paddingBottom: 70 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fafafa'}}>
             <View style={{ paddingHorizontal: 10 }}>
                 <View style={styles.header}>
                     <View style={styles.headerPart1}>
-                        <Text style={styles.headerTxt1}>Users</Text>
-                        <Text style={styles.headerTxt2}>(Total 50+)</Text>
+                        <Text style={styles.headerTxt1}>Appointments</Text>
+                        <Text style={styles.headerTxt2}>(Total {appointments?.length}+)</Text>
                     </View>
                     <TouchableOpacity style={styles.headerBtn}>
                         <Text style={styles.btnTxt}>+ ADD NEW USER</Text>
@@ -95,30 +100,43 @@ const Home = ({navigation}) => {
                     </View>
                 </View>
             </View>
-            
-            <ScrollView style={{ paddingHorizontal: 10 }}>
+
+            <SafeAreaView style={{ paddingHorizontal: 10 }}>
 
                 {!appointments && <Text>Loading...</Text>}
-                {appointments && appointments.map(item => {
-                    return <UserAccordian
+                {appointments && <FlatList
+                    style={{marginBottom: 270}}
+                    data={appointments}
+                    extraData={appointments}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => {
+                        if(item.user.firstName.toLowerCase().includes(query.toLowerCase())){
+                            return <UserAccordian
                                 key={item._id}
                                 data={item}
-                                openQrScanner={()=>beginScan(item._id)}
+                                openQrScanner={() => beginScan(item._id)}
                             />
-                })}
-            </ScrollView>
+                        }
+                        
+                    }}
+                    onRefresh={fetchAllAppointments}
+                    refreshing={loading}
+                />}
+            </SafeAreaView>
             <CustomBottomSheet
                 parentRef={scanSheet}
                 parentHeight={400}
             >
                 <ScanBox
-                    deducedValue={(value)=>promptAndConfirm(value)}  
-                    closeFunc={() => {scanSheet.current.close(); 
-                    setCurrentlyScanning(null);}} 
-                    navigation={navigation} 
+                    deducedValue={(value) => promptAndConfirm(value)}
+                    closeFunc={() => {
+                        scanSheet.current.close();
+                        setCurrentlyScanning(null);
+                    }}
+                    navigation={navigation}
                 />
             </CustomBottomSheet>
-            <BottomTab navigation={navigation}/>
+            <BottomTab navigation={navigation} current={3} />
         </SafeAreaView>
     )
 }
@@ -182,7 +200,7 @@ const styles = StyleSheet.create({
     input: {
         width: '75%',
     },
-    thead:{
+    thead: {
         backgroundColor: '#003686',
         borderRadius: 10,
         paddingHorizontal: 20,
@@ -192,7 +210,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    th:{
+    th: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 15
